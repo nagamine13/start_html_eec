@@ -265,7 +265,7 @@ header{ }
 			li { opacity: 0; transform: translateX(-50px); transition: 0.2s;
 				.nav_link , .sub_nav_link { position: relative; display: block; font-weight: 700; color: var(--c_font_color); white-space: nowrap; color: var(--c_white_l);}
 				.nav_link { padding: 0.5em 0; padding-left: 1.2em;
-					&::before { position: absolute; display: block; content: ""; left: 0; top: calc(0.8em + 0.6em); transform: translateY(-50%); width: 0.6em; height: 1em; background: no-repeat center url(); background-size: contain; }
+					&::before { position: absolute; display: block; content: ""; left: 0; top: calc(0.6em + 0.5em); transform: translateY(-50%); width: 0.6em; height: 1em; background: no-repeat center url(); background-size: contain; }
 					&.disactive {opacity: 0.5;}
 				}
 				@for $step from 1 through 10 {
