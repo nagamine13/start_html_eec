@@ -5,12 +5,13 @@
 :root {
 	--base_distance: min(110px , 11vw);
 	--base_gap: clamp(12px , 2vw , 20px);
-	--base_wrap_width: 94%;
+	--base_wrap_width: 70%;
 	--base_font_size: clamp(13px , 2vw , 15px);
 	--base_line_height: 1.7em;
 }
 @media only screen and (max-width: $mediaquery_w){
 	:root {
+		--base_wrap_width: 92%;
 	}
 }
 
