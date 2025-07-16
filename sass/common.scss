@@ -227,13 +227,15 @@ ul {
 	header
 ------------------------------------------*/
 header{
-	.header_logo {position: fixed; top: 0; left: 0; width: min(120px,  16vw); height: auto; z-index: var(--z_header_logo); transform: translate(15% , 30%); transition: 0.2s;
-		img {display: block; width: 100%; height: auto;}
+	.header_logo {position: fixed; top: 0; left: calc(var(--header_height)*0.5); width: min(120px,  24vw); height: var(--header_height); z-index: var(--z_header_logo); transition: 0.2s;
+		img {display: block; width: 100%; height: 100%; object-fit: contain;}
 		&:hover {opacity: 0.7;}
 	}
 }
 @media only screen and (max-width: $mediaquery_w){
-header{ }
+	header{
+		.header_logo {left: calc(var(--nav_trigger_size)*0.3); height: var(--nav_trigger_size);}
+	}
 }
 
 /*----------------------------------------
@@ -241,14 +243,15 @@ header{ }
 ------------------------------------------*/
 :root {--header_height: min(44px , 10vh);}
 @media only screen and (min-width: $mediaquery_w){
-	#global_nav {position: fixed; top: 0; left: 0; display: flex; justify-content: flex-end; align-items: center; width: 100%; height: var(--header_height); padding: 0 calc(var(--header_height) *0.3); z-index: var(--z_nav); background-color: var(--c_theme_color);
-		.nav_links {display: flex; justify-content: flex-end; align-items: center; font-size: min(16px , 1.3vw); gap: 0.5em; line-height: 1.2em;
+	#global_nav {position: fixed; top: 0; left: 0; display: flex; justify-content: flex-end; align-items: center; width: 100%; height: var(--header_height); padding: 0 calc(var(--header_height) *0.5); z-index: var(--z_nav);
+		&::before { position: absolute; display: block; content: ""; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255,255,255,0.5); backdrop-filter: brightness(6) blur(14px); pointer-events: none; transition: 0.2s; }
+		.nav_links {--nav_font_size : min(16px , 1.3vw); display: flex; justify-content: flex-end; align-items: center; font-size: var(--nav_font_size); gap: 0.5em; line-height: 1.2em;
 			li {
-				.nav_link {position: relative; display: block; line-height: 1.2em; letter-spacing: 0em; white-space: nowrap; font-weight: 600; color: var(--c_font_color); padding: 0.3em 0.4em 0.3em; text-align: left; transition: 0.2s; color: var(--c_white_l);
+				.nav_link {position: relative; display: block; line-height: 1.5em; letter-spacing: 0em; white-space: nowrap; font-weight: 600; color: var(--c_font_color); padding: 0.3em 0.4em 0.3em; text-align: left; transition: 0.2s; color: var(--c_black_d);
 					&:hover , &.active { color: var(--c_link_color);}
 					&.disactive {opacity: 0.5; pointer-events: none;}
 				}
-				&.sns_links {display: flex; justify-content: flex-end; align-items: flex-start; font-size: 16px; gap: 0.5em; margin-left: 0.5em;}
+				&.sns_links {display: flex; justify-content: flex-end; align-items: flex-start; font-size: var(--nav_font_size); gap: 0.5em; margin-left: 0.5em;}
 				.nav_link_icon {position: relative; display: block; width: 1.7em; height: 1.7em;
 					img {display: block; width: 100%; height: auto; transition: 0.2s;}
 					&:hover {
@@ -260,8 +263,9 @@ header{ }
 	}
 }
 @media only screen and (max-width: $mediaquery_w){
-	#global_nav {position: fixed; top: 0; left: 0; width: 100%; height: 100lvh; z-index: var(--z_nav); background-color: var(--c_theme_color); overflow-y: scroll; overflow-x: hidden; padding-top: 60px; opacity: 0; visibility: hidden; pointer-events: none; transition: 0.2s;
-		.nav_links {position: relative; width: 85%; height: auto; margin: 0 auto; text-align: left; font-size: 20px; line-height: 1.2em; letter-spacing: 0.05em;
+	#global_nav {position: fixed; top: 0; left: 0; width: 100%; height: 100lvh; z-index: var(--z_nav); overflow-y: scroll; overflow-x: hidden; padding-top: calc(var(--nav_trigger_size)*1.5); opacity: 0; visibility: hidden; pointer-events: none; transition: 0.2s;
+		&::before { position: absolute; display: block; content: ""; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--c_black_d); opacity: 0.7;}
+		.nav_links {--nav_font_size : 20px; position: relative; width: 85%; height: auto; margin: 0 auto; text-align: left; font-size: var(--nav_font_size); line-height: 1.2em; letter-spacing: 0.05em;
 			li { opacity: 0; transform: translateX(-50px); transition: 0.2s;
 				.nav_link , .sub_nav_link { position: relative; display: block; font-weight: 700; color: var(--c_font_color); white-space: nowrap; color: var(--c_white_l);}
 				.nav_link { padding: 0.5em 0; padding-left: 1.2em;
@@ -271,7 +275,7 @@ header{ }
 				@for $step from 1 through 10 {
 					&:nth-of-type(#{$step}) {transition-delay: calc(#{$step}* 0.05s + 0s);}
 				}
-				&.sns_links {display: flex; justify-content: flex-start; align-items: flex-start; font-size: 20px; gap: 0.5em; padding: 0.8em 0;}
+				&.sns_links {display: flex; justify-content: flex-start; align-items: flex-start; font-size: var(--nav_font_size); gap: 0.5em; padding: 0.8em 0;}
 				.nav_link_icon {position: relative; display: inline-block; width: 2em; height: 2em; overflow: hidden;
 					img {display: block; width: 100%; height: auto; transition: 0.2s;}
 					&:hover {
@@ -290,9 +294,9 @@ header{ }
 
 /* nav trigger
 -------------------------------*/
-:root {--nav_trigger_size: clamp(60px , 10vw , 90px);}
+:root {--nav_trigger_size: clamp(50px , 10vw , 90px);}
 .nav_trigger_outer {display: none; position: fixed; top: 0px; right: 0px; width: var(--nav_trigger_size); height:  var(--nav_trigger_size); cursor: pointer; border-radius: 9999px; z-index: var(--z_nav_trigger);
-	.nav_trigger_bar { position: absolute; width: 50%; height: 24%; top: 50%; left: 50%; transform: translate(-50% , -50%); display: block; transition: 0.6s;
+	.nav_trigger_bar { position: absolute; width: 60%; height: 30%; top: 50%; left: 50%; transform: translate(-50% , -50%); display: block; transition: 0.6s;
 		span {position: absolute; left: 50%; transform: translate(-50% , -50%) rotateZ(0deg); width: 100%; height: clamp(2px , 0.5vw , 3px);  display: block; transition: 0.2s; background-color: var(--c_theme_color); border-radius: 9999px;
 			&:nth-last-of-type(1) {top: calc(50% - 50%); width: 100%;}
 			&:nth-last-of-type(2) {top: calc(50% - 0%); width: 100%;}
@@ -300,7 +304,7 @@ header{ }
 		}
 	}
 	&.type_text {
-		.nav_trigger_bar { height: 30%;
+		.nav_trigger_bar { height: 35%;
 			span {
 				&:nth-last-of-type(1) {top: calc(50% - 50%);}
 				&:nth-last-of-type(2) {top: calc(50% - 10%);}
