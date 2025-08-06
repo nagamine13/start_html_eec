@@ -134,39 +134,39 @@ window.addEventListener('scroll', function() {
 /*----------------------------------------
   tab change
 ------------------------------------------*/
-const tabSwitchBoxes = document.querySelectorAll ('[data-tab="switch"]');
+const tabSwitchBoxes = document.querySelectorAll('[data-tab="switch"]');
 tabSwitchBoxes.forEach((tabSwitchBox) => {
-  let tabSwitchTargetId = tabSwitchBox.getAttribute('data-tab_id');
-  let tabSwitchTarget = document.querySelector(`[data-tab="target"][data-tab_id="${tabSwitchTargetId}"]`);
-  let tabSwitchContents = Array.from(tabSwitchTarget.children);
-  let tabSwitches = Array.from(tabSwitchBox.children);
-  tabSwitches.forEach((tabSwitch) => {
+  const tabSwitchTargetId = tabSwitchBox.getAttribute('data-tab_id');
+  const tabSwitchTarget = document.querySelector(`[data-tab="target"][data-tab_id="${tabSwitchTargetId}"]`);
+  const tabSwitchContents = Array.from(tabSwitchTarget.children);
+  const tabSwitches = Array.from(tabSwitchBox.children);
+  const autoSwitchInterval = 5000; // 自動切り替えの間隔（ミリ秒）
+  let currentIndex = 0;
+  let autoTimer = null;
+  const switchTo = (index) => {
+    tabSwitches.forEach(sw => sw.classList.remove('active'));
+    tabSwitchContents.forEach(content => content.classList.remove('active'));
+    tabSwitches[index].classList.add('active');
+    tabSwitchContents[index].classList.add('active');
+    currentIndex = index;
+  };
+  const startAutoPlay = () => {
+    clearInterval(autoTimer);
+    autoTimer = setInterval(() => {
+      const nextIndex = (currentIndex + 1) % tabSwitches.length;
+      switchTo(nextIndex);
+    }, autoSwitchInterval);
+  };
+  tabSwitches.forEach((tabSwitch, index) => {
     tabSwitch.addEventListener('click', () => {
-      tabSwitches.forEach((tabSwitch) => {
-        tabSwitch.classList.remove('active');
-      });
-      tabSwitchContents.forEach((tabSwitchContent) => {
-        tabSwitchContent.classList.remove('active');
-      });
-      const clickedSwitchIndex = tabSwitches.indexOf(tabSwitch);
-      tabSwitches[clickedSwitchIndex].classList.add('active');
-      tabSwitchContents[clickedSwitchIndex].classList.add('active');
+      switchTo(index);
+      if (tabSwitchBox.getAttribute('data-tabAutoplay') === 'true') {
+        startAutoPlay();
+      }
     });
   });
-  const tabAutoSwitchTime = 6000;
   if (tabSwitchBox.getAttribute('data-tabAutoplay') === 'true') {
-    setInterval(() => {
-      let activeTabIndex = tabSwitches.findIndex(tab => tab.classList.contains('active'));
-      let nextTabIndex = (activeTabIndex + 1) % tabSwitches.length;
-      tabSwitches.forEach((tabSwitch) => {
-        tabSwitch.classList.remove('active');
-      });
-      tabSwitchContents.forEach((tabSwitchContent) => {
-        tabSwitchContent.classList.remove('active');
-      });
-      tabSwitches[nextTabIndex].classList.add('active');
-      tabSwitchContents[nextTabIndex].classList.add('active');
-    }, tabAutoSwitchTime);
+    startAutoPlay();
   }
 });
 
