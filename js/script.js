@@ -343,6 +343,88 @@ if ( xScrollElements ) {
   swiper
 ------------------------------------------*/
 
+/*------- swiper master code -------*/
+function createSwiper(className, customOptions = {}) {
+  // Swiperの存在チェック
+  if (typeof Swiper === 'undefined') {
+    console.warn('Swiper is not loaded. Skipping Swiper initialization.');
+    return null;
+  }
+  // デフォルト設定
+  const defaultOptions = {
+    slidesPerView: 1,
+    centeredSlides: true,
+    loop: true,
+    loopAdditionalSlides: 2,
+    effect: 'slide',
+    pagination: {
+      el: `.${className}-swiper-pagination`,
+      clickable: true,
+    },
+    navigation: {
+      nextEl: `.${className}-swiper-button-next`,
+      prevEl: `.${className}-swiper-button-prev`,
+    },
+    spaceBetween: window.innerWidth * 0.02,
+    roundLengths: true,
+    watchOverflow: true,
+    speed: 500,
+    autoplay: { delay: 6000, },
+  };
+  // スライド数をチェック
+  const slides = document.querySelectorAll(`.${className} .swiper-slide`);
+  const swiperContainer = document.querySelector(`.${className}`);
+  if (!swiperContainer) {
+    console.warn(`Swiper container .${className} not found`);
+    return null;
+  }
+  let finalOptions;
+  if (slides.length <= 1) {
+    // 単一スライドの場合の設定
+    finalOptions = {
+      ...defaultOptions,
+      loop: false,
+      pagination: false,
+      navigation: false,
+      ...customOptions
+    };
+    swiperContainer.classList.add('no_controller');
+  } else {
+    // 複数スライドの場合
+    finalOptions = {
+      ...defaultOptions,
+      ...customOptions
+    };
+  }
+  // Swiperインスタンスを作成して返す
+  return new Swiper(`.${className}`, finalOptions);
+}
+// 複数のSwiperを一括初期化する場合
+function initializeMultipleSwipers(swiperConfigs) {
+  const instances = {};
+  swiperConfigs.forEach(config => {
+    const { name, options = {} } = config;
+    instances[name] = createSwiper(name, options);
+  });
+  return instances;
+}
+/*------- swiper master code -------*/
+
+// シンプルな使用 (swiper-containerに独自classを付け、そのclass名を"swiper1"の所に入力する)
+/* const swiper1 = createSwiper('swiper1'); */
+
+// カスタム設定での使用
+/* const swiper2 = createSwiper('swiper2', {
+  slidesPerView: 3,
+  autoplay: { delay: 3000 }
+}); */
+
+// 複数のSwiperを一度に作成
+/* const allSwipers = initializeMultipleSwipers([
+  { name: 'hero' },
+  { name: 'gallery', options: { slidesPerView: 2 } }
+]); */
+
 
 /*----------------------------------------
   modal
