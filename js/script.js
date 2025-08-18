@@ -351,6 +351,8 @@ function createSwiper(className, customOptions = {}) {
     return null;
   }
   // デフォルト設定
+  const swiperContainer = document.querySelector(`.${className}`);
+  const swiperSlides = document.querySelectorAll(`.${className} .swiper-slide`);
   const defaultOptions = {
     slidesPerView: 1,
     centeredSlides: true,
@@ -376,14 +378,13 @@ function createSwiper(className, customOptions = {}) {
     autoplay: { delay: 6000, },
   };
   // スライド数をチェック
-  const slides = document.querySelectorAll(`.${className} .swiper-slide`);
-  const swiperContainer = document.querySelector(`.${className}`);
+  
   if (!swiperContainer) {
     console.warn(`Swiper container .${className} not found`);
     return null;
   }
   let finalOptions;
-  if (slides.length <= 1) {
+  if (swiperSlides.length <= 1) {
     // 単一スライドの場合の設定
     finalOptions = {
       ...defaultOptions,
