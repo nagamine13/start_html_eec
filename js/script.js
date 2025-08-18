@@ -365,6 +365,10 @@ function createSwiper(className, customOptions = {}) {
       nextEl: `.${className}-swiper-button-next`,
       prevEl: `.${className}-swiper-button-prev`,
     },
+    scrollbar: {
+      el: `.${className}-swiper-scrollbar`,
+      draggable: true,
+    },
     spaceBetween: window.innerWidth * 0.02,
     roundLengths: true,
     watchOverflow: true,
@@ -386,6 +390,7 @@ function createSwiper(className, customOptions = {}) {
       loop: false,
       pagination: false,
       navigation: false,
+      scrollbar: false,
       ...customOptions
     };
     swiperContainer.classList.add('no_controller');
