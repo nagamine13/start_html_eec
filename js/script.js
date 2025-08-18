@@ -378,7 +378,6 @@ function createSwiper(className, customOptions = {}) {
     autoplay: { delay: 6000, },
   };
   // スライド数をチェック
-  
   if (!swiperContainer) {
     console.warn(`Swiper container .${className} not found`);
     return null;
