@@ -340,6 +340,94 @@ if ( xScrollElements ) {
 }
 
 /*----------------------------------------
+  span slice
+------------------------------------------*/
+document.addEventListener('DOMContentLoaded', () => {
+  const elements = document.querySelectorAll('[data-dom_custom="span_slice"]');
+
+  elements.forEach(element => {
+    const originalContents = Array.from(element.childNodes);
+    element.innerHTML = '';
+
+    originalContents.forEach(node => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        Array.from(node.textContent).forEach(char => {
+          const span = document.createElement('span');
+          if (char === ' ') {
+            span.innerHTML = '&nbsp;';
+          } else {
+            span.textContent = char;
+          }
+          element.appendChild(span);
+        });
+      } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'BR') {
+        element.appendChild(node.cloneNode());
+      } else {
+        element.appendChild(node.cloneNode(true));
+      }
+    });
+  });
+});
+
+/*----------------------------------------
+  auto scroll animation
+------------------------------------------*/
+document.addEventListener('DOMContentLoaded', () => {
+    const autoScrollElements = document.querySelectorAll('[data-auto-scroll-animation]');
+    autoScrollElements.forEach(el => {
+        const style = getComputedStyle(el);
+        const backgroundImageURL = style.backgroundImage.slice(5, -2);
+        if (!backgroundImageURL) return;
+        const img = new Image();
+        img.src = backgroundImageURL;
+        const updateAnimation = () => {
+            const direction = el.dataset.autoScrollAnimation;
+            const duration = el.dataset.autoScrollAnimationDuration || '10s';
+            let elementWidth = parseFloat(style.width);
+            let elementHeight = parseFloat(style.height);
+            let fromPosition, toPosition;
+            const animName = `scroll-${direction}-${Date.now()}`;
+            if (direction === 'vertical') {
+                const imgHeight = elementWidth / img.width * img.height;
+                fromPosition = '0px 0px';
+                toPosition = `0px ${imgHeight}px`;
+            } else if (direction === 'vertical_reverse') {
+                const imgHeight = elementWidth / img.width * img.height;
+                fromPosition = `0px ${imgHeight}px`;
+                toPosition = '0px 0px';
+            } else if (direction === 'horizontal') {
+                const imgWidth = elementHeight / img.height * img.width;
+                fromPosition = '0px 0px';
+                toPosition = `${imgWidth}px 0px`;
+            } else if (direction === 'horizontal_reverse') {
+                const imgWidth = elementHeight / img.height * img.width;
+                fromPosition = `${imgWidth}px 0px`;
+                toPosition = '0px 0px';
+            } else {
+                return;
+            }
+            const styleSheet = document.createElement("style");
+            styleSheet.innerText = `
+                @keyframes ${animName} {
+                    from { background-position: ${fromPosition}; }
+                    to { background-position: ${toPosition}; }
+                }
+                [data-auto-scroll-animation="${direction}"][data-auto-scroll-animation-duration="${duration}"] {
+                    animation: ${animName} ${duration} linear infinite;
+                }
+            `;
+            document.head.appendChild(styleSheet);
+        };
+        img.onload = updateAnimation;
+        window.addEventListener('resize', () => {
+            updateAnimation();
+        });
+    });
+});
+
+// data-auto-scroll-animation="vertical" data-animation-duration="3s"
+
+/*----------------------------------------
   swiper
 ------------------------------------------*/
 

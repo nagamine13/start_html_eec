@@ -2,7 +2,7 @@
 	base
 ------------------------------------------*/
 html.html_reset {margin: 0!important; padding: 0!important;}
-body {position: relative; height:100%; width: 100%; overflow-y: scroll; overflow-x: hidden; background-color: var(--c_bg_color); text-align: center; color: var(--c_font_color); font-family: var(--font_base_setting); font-size: var(--base_font_size); font-optical-sizing: auto; font-weight: 500; line-height: var(--base_line_height); word-break: break-word; word-break: auto-phrase;
+body {position: relative; height:100%; width: 100%; overflow-y: scroll; overflow-x: hidden; background-color: var(--c_bg_color); text-align: center; color: var(--c_font_color); font-family: var(--font_base_setting); font-size: var(--base_font_size); font-optical-sizing: auto; font-weight: 500; line-height: var(--base_line_height); word-break: break-word; /* word-break: auto-phrase; */
 }
 main {position: relative; overflow: clip;}
 a { color: var(--c_link_color); }
@@ -129,6 +129,7 @@ body {overflow: hidden; min-height: 100%;
 .cmn_bg_layer {position: absolute; top: 0; left: 0; width: 100%; height: 100%;}
 .cmn_main_layer {position: relative;}
 
+.cmn_link_btn_outer {position: relative; display: block; text-align: center; width: 100%; height: auto; margin: 0 auto;}
 .cmn_link_btn_a {position: relative; display: inline-block; margin: 0 auto; padding: 0.5em 1.5em; height: auto; width: auto; min-width: min(340px , 100%); background-color: var(--c_white); line-height: 1.4em; color: var(--c_link_color); font-size: clamp( 16px , 5.5vw , 26px ); text-decoration: initial!important; transition: 0.2s;
 	img {position: relative; height: 1.4em; width: auto;}
 	span {position: relative;}
@@ -159,7 +160,7 @@ body {overflow: hidden; min-height: 100%;
 @media only screen and (max-width: 835px){
 	.cmn_write_box_outer  {padding: calc(var(--base_gap)*2.5) calc(var(--base_gap)*1.5);}
 }
-:root {--cmn_write_box_theme_color: #{var(--c_theme_color)};}
+:root {--cmn_write_box_theme_color: var(--c_theme_color);}
 .cmn_write_box {position: relative; text-align: left; font-size: clamp(13px , 2vw , 16px); line-height: 1.5em;  width: 100%;
 	.title_box {position: relative; display: block; padding-bottom: calc(clamp(17px , 2vw , 24px)*0.8) ; margin-bottom: 2em; border-bottom: 4px double var(--cmn_write_box_theme_color); }
 	.date { font-size: clamp(12px , 2vw , 14px); line-height: 1.4em; font-weight: bold; margin-bottom: 0.7em; letter-spacing: 0.1em; }
@@ -240,7 +241,7 @@ header{
 ------------------------------------------*/
 :root {--header_height: min(44px , 10vh);}
 @media only screen and (min-width: 835px){
-	#global_nav {position: fixed; top: 0; left: 0; display: flex; justify-content: flex-end; align-items: center; width: 100%; height: var(--header_height); padding: 0 calc(var(--header_height) *0.5); z-index: var(--z_nav);
+	#global_nav {position: fixed; z-index: var(--z_nav); top: 0; left: 0; display: flex; justify-content: flex-end; align-items: center; width: 100%; height: var(--header_height); padding: 0 calc(var(--header_height) *0.5);
 		&::before { position: absolute; display: block; content: ""; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255,255,255,0.5); backdrop-filter: brightness(6) blur(14px); pointer-events: none; transition: 0.2s; }
 		.nav_links {--nav_font_size : min(16px , 1.3vw); display: flex; justify-content: flex-end; align-items: center; font-size: var(--nav_font_size); gap: 0.5em; line-height: 1.2em;
 			li {
@@ -263,14 +264,11 @@ header{
 	#global_nav {position: fixed; top: 0; left: 0; width: 100%; height: 100lvh; z-index: var(--z_nav); overflow-y: scroll; overflow-x: hidden; padding-top: calc(var(--nav_trigger_size)*1.5); opacity: 0; visibility: hidden; pointer-events: none; transition: 0.2s;
 		&::before { position: absolute; display: block; content: ""; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--c_black_d); opacity: 0.9;}
 		.nav_links {--nav_font_size : 20px; position: relative; width: 85%; height: auto; margin: 0 auto; text-align: left; font-size: var(--nav_font_size); line-height: 1.2em; letter-spacing: 0.05em;
-			li { opacity: 0; transform: translateX(-50px); transition: 0.2s;
+			li { opacity: 0; transform: translateX(-50px); transition: 0.2s; transition-delay: calc(var(--step_delay) * 0.05s + 0s);
 				.nav_link , .sub_nav_link { position: relative; display: block; font-weight: 700; color: var(--c_font_color); white-space: nowrap; color: var(--c_white_l);}
 				.nav_link { padding: 0.5em 0; padding-left: 1.2em;
 					&::before { position: absolute; display: block; content: ""; left: 0; top: calc(0.6em + 0.5em); transform: translateY(-50%); width: 0.6em; height: 1em; background: no-repeat center url(); background-size: contain; }
 					&.disactive {opacity: 0.5;}
-				}
-				@for $step from 1 through 10 {
-					&:nth-of-type(#{$step}) {transition-delay: calc(#{$step}* 0.05s + 0s);}
 				}
 				&.sns_links {display: flex; justify-content: flex-start; align-items: flex-start; font-size: var(--nav_font_size); gap: 0.5em; padding: 0.8em 0;}
 				.nav_link_icon {position: relative; display: inline-block; width: 2em; height: 2em; overflow: hidden;
@@ -335,12 +333,52 @@ footer{ }
 	bg
 ------------------------------------------*/
 
+/*----------------------------------------
+	step delay
+------------------------------------------*/
+.cmn_step_delay_box {
+	li,div,p,span  {
+		&:nth-of-type(1) {--step_delay: 0;}
+		&:nth-of-type(2) {--step_delay: 1;}
+		&:nth-of-type(3) {--step_delay: 2;}
+		&:nth-of-type(4) {--step_delay: 3;}
+		&:nth-of-type(5) {--step_delay: 4;}
+		&:nth-of-type(6) {--step_delay: 5;}
+		&:nth-of-type(7) {--step_delay: 6;}
+		&:nth-of-type(8) {--step_delay: 7;}
+		&:nth-of-type(9) {--step_delay: 8;}
+		&:nth-of-type(10) {--step_delay: 9;}
+		&:nth-of-type(11) {--step_delay: 10;}
+		&:nth-of-type(12) {--step_delay: 11;}
+		&:nth-of-type(13) {--step_delay: 12;}
+		&:nth-of-type(14) {--step_delay: 13;}
+		&:nth-of-type(15) {--step_delay: 14;}
+		&:nth-of-type(16) {--step_delay: 15;}
+		&:nth-of-type(17) {--step_delay: 16;}
+		&:nth-of-type(18) {--step_delay: 17;}
+		&:nth-of-type(19) {--step_delay: 18;}
+		&:nth-of-type(20) {--step_delay: 19;}
+		&:nth-of-type(21) {--step_delay: 20;}
+		&:nth-of-type(22) {--step_delay: 21;}
+		&:nth-of-type(23) {--step_delay: 22;}
+		&:nth-of-type(24) {--step_delay: 23;}
+		&:nth-of-type(25) {--step_delay: 24;}
+		&:nth-of-type(26) {--step_delay: 25;}
+		&:nth-of-type(27) {--step_delay: 26;}
+		&:nth-of-type(28) {--step_delay: 27;}
+		&:nth-of-type(29) {--step_delay: 28;}
+		&:nth-of-type(30) {--step_delay: 29;}
+	}
+}
+
 
 /*----------------------------------------
 	modal
 ------------------------------------------*/
 .cmn_modal_layer{--modal_btn_size: clamp(50px , 5vw , 70px); position: fixed; top: 0px; left: 0; right: 0; bottom: 0; width: 100%; height: calc(100%); z-index: var(--z_modal); opacity: 0; visibility: hidden; pointer-events: none;
-	.modal_bg {position: fixed; top: 0px; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); opacity: 0; transition: 0.6s;}
+	.modal_bg {position: fixed; top: 0px; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; opacity: 0; transition: 0.6s;
+		&::before { position: absolute; display: block; content: ""; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--c_black_d); opacity: 0.6; }
+	}
 	.modal_inner { position: absolute; width: auto; height: auto; top:50%; left: 50%; transform: translateX(-50%) translateY(-50%); text-align: left; opacity: 0; transition: 0.6s;
 		img {width: auto; height: auto; max-width: min(1400px, 94vw); max-height: 75vh; cursor: initial;
 			&.img_mono_modal_content {width: auto!important; height: auto!important; cursor: initial!important;}
