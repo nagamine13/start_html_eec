@@ -428,6 +428,26 @@ document.addEventListener('DOMContentLoaded', () => {
 // data-auto-scroll-animation="vertical" data-animation-duration="3s"
 
 /*----------------------------------------
+  click link
+------------------------------------------*/
+document.addEventListener('DOMContentLoaded', () => {
+    const clickPoints = document.querySelectorAll('[data-click_link_click_point]');
+    clickPoints.forEach(clickPoint => {
+        clickPoint.addEventListener('click', (event) => {
+            event.preventDefault();
+            const linkId = clickPoint.getAttribute('data-click_link_click_point');
+            
+            if (linkId) {
+                const endPoint = document.querySelector(`[data-click_link_end_point="${linkId}"]`);
+                if (endPoint) {
+                    endPoint.click();
+                }
+            }
+        });
+    });
+});
+
+/*----------------------------------------
   swiper
 ------------------------------------------*/
 
