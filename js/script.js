@@ -425,7 +425,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// data-auto-scroll-animation="vertical" data-animation-duration="3s"
+// data-auto-scroll-animation="horizontal_reverse" data-auto-scroll-animation-duration="30s"
 
 /*----------------------------------------
   click link
