@@ -29,53 +29,41 @@ window.addEventListener('load', () => {
 const navTriggers = document.querySelectorAll('[data-nav="nav_trigger"]');
 const globalNavs = document.querySelectorAll('[data-nav="global_nav"]');
 const globalNavOverlay = document.querySelector('[data-nav="global_nav_overlay"]');
+const toggleNav = () => {
+  navTriggers.forEach((navTrigger) => navTrigger.classList.toggle('active'));
+  globalNavs.forEach((globalNav) => globalNav.classList.toggle('active'));
+  document.querySelector('body').classList.toggle('scroll_on');
+  globalNavOverlay?.classList.toggle('active');
+};
+const closeNav = () => {
+  navTriggers.forEach((navTrigger) => navTrigger.classList.remove('active'));
+  globalNavs.forEach((globalNav) => globalNav.classList.remove('active'));
+  document.querySelector('body').classList.add('scroll_on');
+  globalNavOverlay?.classList.remove('active');
+};
 navTriggers.forEach((navTrigger) => {
-  navTrigger.addEventListener('click' , () => {
-    navTriggers.forEach((navTrigger) => {
-      navTrigger.classList.toggle('active');
-    });
-    globalNavs.forEach((globalNav) => {
-      globalNav.classList.toggle("active");
-    });
-    document.querySelector('body').classList.toggle("scroll_on");
-    if (globalNavOverlay) {
-      globalNavOverlay.classList.toggle("active");
-    };
-  });
+  navTrigger.addEventListener('click', toggleNav);
 });
 globalNavs.forEach((globalNav) => {
-  globalNav.addEventListener('click' , () => {
-    globalNav.classList.remove('active');
-    navTriggers.forEach((navTrigger) => {
-      navTrigger.classList.remove('active');
-    });
-    document.querySelector("body").classList.add("scroll_on");
+  globalNav.addEventListener('click', (e) => {
+    if (e.target.tagName === 'A' && e.target.getAttribute('href')?.startsWith('#')) {
+      closeNav();
+    }
   });
 });
-if (globalNavOverlay) {
-  globalNavOverlay.addEventListener('click' , () => {
-    globalNavs.forEach((globalNav) => {
-      globalNav.classList.remove('active');
-    });
-    navTriggers.forEach((navTrigger) => {
-      navTrigger.classList.remove('active');
-    });
-    document.querySelector("body").classList.add("scroll_on");
-    globalNavOverlay.classList.remove("active");
-  });
-};
+globalNavOverlay?.addEventListener('click', closeNav);
 
 const subNavOpens = document.querySelectorAll('[data-nav="sub_nav_open"]');
 subNavOpens.forEach(function (subNavOpen) {
   subNavOpen.addEventListener("mouseover", () => {
-      subNavOpen.firstElementChild.classList.add("active");
-      subNavOpen.lastElementChild.classList.add("active");
+      subNavOpen.firstElementChild?.classList.add("active");
+      subNavOpen.lastElementChild?.classList.add("active");
     },false
   );
   subNavOpen.addEventListener("mouseout", () => {
-    subNavOpen.firstElementChild.classList.remove("active");
-    subNavOpen.lastElementChild.classList.remove("active");
-  },false
+      subNavOpen.firstElementChild?.classList.remove("active");
+      subNavOpen.lastElementChild?.classList.remove("active");
+    },false
   );
 });
 
@@ -132,17 +120,19 @@ window.addEventListener('scroll', function() {
 });
 
 /*----------------------------------------
-  tab change
+  tab change URL query support
 ------------------------------------------*/
 const tabSwitchBoxes = document.querySelectorAll('[data-tab="switch"]');
+
 tabSwitchBoxes.forEach((tabSwitchBox) => {
   const tabSwitchTargetId = tabSwitchBox.getAttribute('data-tab_id');
   const tabSwitchTarget = document.querySelector(`[data-tab="target"][data-tab_id="${tabSwitchTargetId}"]`);
   const tabSwitchContents = Array.from(tabSwitchTarget.children);
   const tabSwitches = Array.from(tabSwitchBox.children);
-  const autoSwitchInterval = 5000; // 自動切り替えの間隔（ミリ秒）
+  const autoSwitchInterval = 5000;
   let currentIndex = 0;
   let autoTimer = null;
+
   const switchTo = (index) => {
     tabSwitches.forEach(sw => sw.classList.remove('active'));
     tabSwitchContents.forEach(content => content.classList.remove('active'));
@@ -150,6 +140,7 @@ tabSwitchBoxes.forEach((tabSwitchBox) => {
     tabSwitchContents[index].classList.add('active');
     currentIndex = index;
   };
+
   const startAutoPlay = () => {
     clearInterval(autoTimer);
     autoTimer = setInterval(() => {
@@ -157,14 +148,47 @@ tabSwitchBoxes.forEach((tabSwitchBox) => {
       switchTo(nextIndex);
     }, autoSwitchInterval);
   };
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const tabActivate = urlParams.get('tab');
+  
+  if (tabActivate) {
+    const targetIndex = tabSwitches.findIndex(sw => 
+      sw.getAttribute('data-tab_name') === tabActivate
+    );
+    if (targetIndex !== -1) {
+      switchTo(targetIndex);
+    } else {
+      switchTo(0);
+    }
+  } else {
+    switchTo(0);
+  }
+
   tabSwitches.forEach((tabSwitch, index) => {
     tabSwitch.addEventListener('click', () => {
       switchTo(index);
+      
+      const tabName = tabSwitch.getAttribute('data-tab_name');
+      if (tabName) {
+        const newUrl = new URL(window.location);
+        newUrl.searchParams.set('tab', tabName);
+        window.history.pushState({}, '', newUrl);
+        
+        // 言語切替リンクのURLも更新
+        const langLink = document.getElementById('fixed_lang_change');
+        if (langLink) {
+          const baseUrl = langLink.href.split('?')[0];
+          langLink.href = baseUrl + '?tab=' + tabName;
+        }
+      }
+      
       if (tabSwitchBox.getAttribute('data-tabAutoplay') === 'true') {
         startAutoPlay();
       }
     });
   });
+
   if (tabSwitchBox.getAttribute('data-tabAutoplay') === 'true') {
     startAutoPlay();
   }
@@ -380,31 +404,39 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!backgroundImageURL) return;
         const img = new Image();
         img.src = backgroundImageURL;
+        let resizeTimer;
+        let lastWidth = window.innerWidth;
+        let lastHeight = window.innerHeight;
+        const threshold = 50;
+        let currentStyleSheet = null;
         const updateAnimation = () => {
             const direction = el.dataset.autoScrollAnimation;
             const duration = el.dataset.autoScrollAnimationDuration || '10s';
             let elementWidth = parseFloat(style.width);
             let elementHeight = parseFloat(style.height);
             let fromPosition, toPosition;
-            const animName = `scroll-${direction}-${Date.now()}`;
+            const animName = `scroll-${direction}-${duration.replace('.', '_')}`;
             if (direction === 'vertical') {
-                const imgHeight = elementWidth / img.width * img.height;
+                const imgHeight = Math.round(elementWidth / img.width * img.height);
                 fromPosition = '0px 0px';
                 toPosition = `0px ${imgHeight}px`;
             } else if (direction === 'vertical_reverse') {
-                const imgHeight = elementWidth / img.width * img.height;
+                const imgHeight = Math.round(elementWidth / img.width * img.height);
                 fromPosition = `0px ${imgHeight}px`;
                 toPosition = '0px 0px';
             } else if (direction === 'horizontal') {
-                const imgWidth = elementHeight / img.height * img.width;
+                const imgWidth = Math.round(elementHeight / img.height * img.width);
                 fromPosition = '0px 0px';
                 toPosition = `${imgWidth}px 0px`;
             } else if (direction === 'horizontal_reverse') {
-                const imgWidth = elementHeight / img.height * img.width;
+                const imgWidth = Math.round(elementHeight / img.height * img.width);
                 fromPosition = `${imgWidth}px 0px`;
                 toPosition = '0px 0px';
             } else {
                 return;
+            }
+            if (currentStyleSheet) {
+                currentStyleSheet.remove();
             }
             const styleSheet = document.createElement("style");
             styleSheet.innerText = `
@@ -417,15 +449,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             `;
             document.head.appendChild(styleSheet);
+            currentStyleSheet = styleSheet;
         };
         img.onload = updateAnimation;
         window.addEventListener('resize', () => {
-            updateAnimation();
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                const currentWidth = window.innerWidth;
+                const currentHeight = window.innerHeight;
+                const widthDiff = Math.abs(currentWidth - lastWidth);
+                const heightDiff = Math.abs(currentHeight - lastHeight);
+
+                if (widthDiff > threshold || heightDiff > threshold) {
+                    lastWidth = currentWidth;
+                    lastHeight = currentHeight;
+                    updateAnimation();
+                }
+            }, 250);
         });
     });
 });
 
-// data-auto-scroll-animation="horizontal_reverse" data-auto-scroll-animation-duration="30s"
+//  data-auto-scroll-animation="horizontal_reverse" data-auto-scroll-animation-duration="30s"
 
 /*----------------------------------------
   click link
@@ -443,6 +488,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     endPoint.click();
                 }
             }
+        });
+    });
+});
+
+/*----------------------------------------
+  img dl disable
+------------------------------------------*/
+document.addEventListener('DOMContentLoaded', function() {
+    const images = document.querySelectorAll('img');
+    images.forEach(function(img) {
+        img.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
         });
     });
 });
