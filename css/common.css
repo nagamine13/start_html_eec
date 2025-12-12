@@ -7,10 +7,11 @@ body {position: relative; height:100%; width: 100%; overflow-y: scroll; overflow
 main {position: relative; overflow: clip;}
 a { color: var(--c_link_color); }
 img {max-width: 100%; height: auto;}
+:root {color-scheme: only light;}
 @media only screen and (max-width: 835px){
-body {overflow: hidden; min-height: 100%;
-	&.scroll_on { overflow-y: scroll; overflow-x: hidden; pointer-events: auto;}
-}
+	body {overflow: hidden; min-height: 100%;
+		&.scroll_on { overflow-y: scroll; overflow-x: hidden; pointer-events: auto;}
+	}
 }
 
 /*----------------------------------------
