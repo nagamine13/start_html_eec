@@ -41,7 +41,7 @@
 <meta name="twitter:url" content="*https://SITE-URL.com*">
 <!-- ▼ CSS Load ▼-->
 <link href="css/reset.css" rel="stylesheet" type="text/css" media="all" />
-<!-- <link href="css/swiper-bundle_8.min.css" rel="stylesheet"> -->
+<link href="css/swiper-bundle_8.min.css" rel="stylesheet">
 <link href="css/settings.css" rel="stylesheet" type="text/css" media="all" />
 <link href="css/common.css" rel="stylesheet" type="text/css" media="all" />
 <link href="css/pages.css" rel="stylesheet" type="text/css" media="all" />
@@ -59,7 +59,7 @@
   header
 ------------------------------------------->
 <header>
-  <a href="#fv" class="header_logo"><img src="" alt=""></a>
+  <a href="#fv" class="header_logo"><img src="images/template_parts/void.svg" alt=""></a>
   <!----- global nav ------>
   <nav id="global_nav" data-nav="global_nav">
     <ul class="nav_links cmn_step_delay_box">
@@ -68,14 +68,17 @@
       <li><a href="cast-staff.html" class="nav_link">Cast&Staff</a></li>
       <li><a href="tickets-schedule.html" class="nav_link">Ticket&Schedule</a></li>
       <li><a href="guide.html" class="nav_link disactive">Guide</a></li>
-      <li class="sns_links">
-        <a href="#" target="_blank" class="nav_link_icon"><img src="images/sns_icon/sns_icon_x_bw.svg" alt="official X"></a>
-        <a href="#" target="_blank" class="nav_link_icon"><img src="images/sns_icon/sns_icon_youtube_bw.svg" alt="official YouTube"></a>
+      <li>
+        <ul class="sns_links">
+          <li><a href="#" target="_blank" class="nav_link_icon"><img src="images/sns_icon/sns_icon_x_bw.svg" alt="official X"></a></li>
+          <li><a href="#" target="_blank" class="nav_link_icon"><img src="images/sns_icon/sns_icon_youtube_bw.svg" alt="official YouTube"></a></li>
+        </ul>
       </li>
     </ul>
   </nav>
   <!----- global nav ------>
-  <div class="nav_trigger_outer type_text sp_only" data-nav="nav_trigger"><div class="nav_trigger_bar"><span></span><span></span><span></span></div></div>
+  <div class="nav_trigger_outer type_text sp_only" data-nav="nav_trigger"><div class="nav_trigger_bar"><span></span><span></span><span></span></div></div><!-- ハンバーガーメニューを三本線のみにしたい場合、class="type_text"を削除 -->
+  
 </header>
 <!-----------------------------------------
   header
@@ -85,7 +88,6 @@
   main
 ------------------------------------------->
 <main>
-
 </main>
 <!-----------------------------------------
   main
@@ -95,14 +97,13 @@
   footer
 ------------------------------------------->
 <footer>
-
 </footer>
 <!-----------------------------------------
   footer
 ------------------------------------------->
 
 
-<!-- <script src="js/swiper-bundle_8.min.js" ></script> -->
+<script src="js/swiper-bundle_8.min.js" ></script>
 <script src="js/script.js"></script>
 
 </body>

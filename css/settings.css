@@ -3,30 +3,37 @@
 :root {
 	--base_distance: min(110px , 11vw);
 	--base_gap: clamp(12px , 2vw , 20px);
-	--base_wrap_width: 70%;
+	--base_wrap_width: 70vw;
 	--base_font_size: clamp(13px , 2vw , 15px);
 	--base_line_height: 1.7em;
+	--base_border_radius:clamp( 4px , 1vw , 8px);
 }
 @media only screen and (max-width: 835px){
 	:root {
-		--base_wrap_width: 92%;
+		--base_wrap_width: 92vw;
 	}
 }
 
 /* color settings
 -------------------------------*/
 :root {
-	--c_theme_color:#ff0000;
+	--c_theme_color:#0004ff;
 	--c_bg_color:#191919;
 	--c_font_color:#ffffff;
-	--c_link_color:#ff0000;
-	--c_white_l: #fff;
+	--c_link_color:#0004ff;
+	--c_white_l: #ffffff;
 	--c_white:#fcfcfc;
-	--c_lightgray:#e7e7e7;
+	--c_gray_l:#e7e7e7;
 	--c_gray:#9B9B9B;
-	--c_darkgray: #707070;
+	--c_gray_d: #707070;
 	--c_black:#191919;
 	--c_black_d:#000;
+
+	/* 
+	--c_red : #ff0000;
+	--c_green : #00ff00;
+	--c_blue : #0000ff; 
+	*/
 }
 
 /* font family settings
@@ -35,6 +42,7 @@
 	--font_base_setting : 'Noto Sans JP', 'Noto Sans', "メイリオ","Meiryo","MS PGothic",sans-serif;
 	--f_noto : 'Noto Sans JP', 'Noto Sans', "メイリオ","Meiryo","MS PGothic",sans-serif;
 	--f_hiragino : "Helvetica Neue", Arial , "Hiragino Kaku Gothic ProN","Hiragino Sans" , Meiryo , sans-serif;
+	/* --f_■■■■■■■ : ■■■■■■■ , 'Noto Sans JP', 'Noto Sans', "メイリオ","Meiryo","MS PGothic",sans-serif; */
 }
 
 /* z-index
