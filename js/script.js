@@ -1077,9 +1077,9 @@
  * 使い方:
  * 
  * 【HTML構造】
- *  <div class="swiper-container swiper1">
- *    <div class="swiper-wrapper">
- *      <!----- slide ------>
+ * <div class="swiper-container swiper1">
+ *   <div class="swiper-wrapper">
+ *     <!----- slide ------>
  *      <div class="swiper-slide">
  *        <div class="slide_inner">
  *        </div>
@@ -1091,20 +1091,14 @@
  *        </div>
  *      </div>
  *      <!----- slide ------>
- *      <!----- slide ------>
- *      <div class="swiper-slide">
- *        <div class="slide_inner">
- *        </div>
- *      </div>
- *      <!----- slide ------>
- *    </div>
- *    <div class="swiper_controller swiper1-swiper_controller">
- *      <div class="swiper-button-prev swiper1-swiper-button-prev"></div>
- *      <div class="swiper-pagination swiper1-swiper-pagination"></div>
- *      <div class="swiper-scrollbar swiper1-swiper-scrollbar"></div>
- *      <div class="swiper-button-next swiper1-swiper-button-next"></div>
- *    </div>
- *  </div>
+ *   </div>
+ *   <div class="swiper_controller swiper1-swiper-controller">
+ *     <div class="swiper-button-prev swiper1-swiper-button-prev"></div>
+ *     <div class="swiper-pagination swiper1-swiper-pagination"></div>
+ *     <div class="swiper-scrollbar swiper1-swiper-scrollbar"></div>
+ *     <div class="swiper-button-next swiper1-swiper-button-next"></div>
+ *   </div>
+ * </div>
  * 
  * 【シンプルな使用】
  * const swiper1 = createSwiper('swiper1');
@@ -1115,14 +1109,8 @@
  *   autoplay: { delay: 3000 }
  * });
  * 
- * 【複数のSwiperを一度に作成】
- * const allSwipers = initializeMultipleSwipers([
- *   { name: 'hero' },
- *   { name: 'gallery', options: { slidesPerView: 2 } }
- * ]);
- * 
  * スライドが1枚以下の場合、自動的にループ・ナビゲーションを無効化
- * コンテナにclass="no_controller"を追加
+ * コントローラー要素（{className}-swiper-controller）にclass="disactive"を追加
  */
 
 (function() {
@@ -1139,6 +1127,7 @@
     roundLengths: true,
     watchOverflow: true,
     speed: 500,
+    autoplay: { delay: 6000 }
   };
   
   const SINGLE_SLIDE_CONFIG = {
@@ -1191,7 +1180,12 @@
     let finalOptions;
     
     if (isSingleSlide) {
-      container.classList.add('no_controller');
+      // コントローラーにdisactiveクラスを追加
+      const controller = document.querySelector(`.${className}-swiper-controller`);
+      if (controller) {
+        controller.classList.add('disactive');
+      }
+      
       finalOptions = {
         ...DEFAULT_CONFIG,
         ...SINGLE_SLIDE_CONFIG,
@@ -1209,29 +1203,12 @@
     return new Swiper(`.${className}`, finalOptions);
   }
   
-  /**
-   * 複数のSwiperを一括初期化
-   * @param {Array} swiperConfigs - Swiper設定の配列
-   * @returns {Object} Swiperインスタンスのオブジェクト
-   */
-  function initializeMultipleSwipers(swiperConfigs) {
-    const instances = {};
-    
-    swiperConfigs.forEach(config => {
-      const { name, options = {} } = config;
-      instances[name] = createSwiper(name, options);
-    });
-    
-    return instances;
-  }
-  
   // グローバルに公開
   window.createSwiper = createSwiper;
-  window.initializeMultipleSwipers = initializeMultipleSwipers;
   
 })();
 
-// 使用例（コメントアウト）
+// 使用例
 // シンプルな使用
 // const swiper1 = createSwiper('swiper1');
 
@@ -1241,158 +1218,272 @@
 //   autoplay: { delay: 3000 }
 // });
 
-// 複数のSwiperを一度に作成
-// const allSwipers = initializeMultipleSwipers([
-//   { name: 'hero' },
-//   { name: 'gallery', options: { slidesPerView: 2 } }
-// ]);
-
 
 /*----------------------------------------
   modal
 ------------------------------------------*/
-/*-- youtube replace --*/
-function ImageToYoutubeReplace(ytImage) {
-  let youtubeId = ytImage.getAttribute('youtubeid');
-  let youtubeVideo = '<iframe class="youtube_player" youtubeid="'+ youtubeId +'" src="https://www.youtube.com/embed/'+ youtubeId +'?playsinline=1&enablejsapi=1&rel=0" frameborder="0" allowfullscreen></iframe>'
-  ytImage.innerHTML = youtubeVideo;
-  ytImage.classList.add('play');
-};
-function YoutubeToImageReplace(ytIframe) {
-  let youtubeId = ytIframe.getAttribute('youtubeid');
-  let youtubeImage = '<img src="https://img.youtube.com/vi/'+ youtubeId +'/maxresdefault.jpg" alt="thumbs">'
-  ytIframe.innerHTML = youtubeImage;
-  ytIframe.classList.remove('play');
-};
-/*-- youtube replace --*/
-/*-- mono modal open --*/
-const monoModalOpens = document.querySelectorAll ('[data-modal="mono_modal_open"]');
-monoModalOpens.forEach((monoModalOpen) => {
-  monoModalOpen.addEventListener('click' , () => {
-    let modalTargetId = monoModalOpen.getAttribute('data-mono_modal_target_id');
-    let monoModalOpenTarget = document.querySelector(`[data-mono_modal_id="${modalTargetId}"]`);
-    if(monoModalOpenTarget) {
-      monoModalOpenTarget.classList.add('visible');
-    }
-  });
-});
-/*-- mono modal --*/
-/*-- image_mono_modal_trigger --*/
-const imageMonoModals = document.querySelectorAll('[data-modal="img_mono_modal_trigger"]');
-imageMonoModals.forEach((image) => {
-  const imageSrc = image.getAttribute('src');
-  const newHTML = `
-    <div data-modal="img_mono_modal_open" class="cmn_img_mono_modal_trigger"><img src="${imageSrc}" alt="modal open"></div>
-    <!----- modal ------>
-    <div class="cmn_modal_layer">
-      <div class="modal_bg" data-modal="modal_close_element"></div>
-      <div class="modal_inner">
-        <!----- modal content ------>
-        <img src="${imageSrc}" class="img_mono_modal_content" alt="">
-        <!----- modal content ------>
-      </div>
-      <div class="modal_close_btn" data-modal="modal_close_element"></div>
-    </div>
-    <!----- modal ------>
-  `;
-  image.parentNode.replaceChild(document.createRange().createContextualFragment(newHTML), image);
-});
-const imgMonoModalOpens = document.querySelectorAll ('[data-modal="img_mono_modal_open"]');
-imgMonoModalOpens.forEach((imgMonoModalOpen) => {
-  imgMonoModalOpen.addEventListener('click' , () => {
-    let imgMonoModalOpenTarget = imgMonoModalOpen.nextElementSibling;
-    if(imgMonoModalOpenTarget) {
-      imgMonoModalOpenTarget.classList.add('visible');
-    }
-  });
-});
-/*-- image_mono_modal_trigger --*/
-/*-- youtube modal --*/
-const youtubeMonoModalOpens = document.querySelectorAll ('[data-modal="youtube_mono_modal_open"]');
-youtubeMonoModalOpens.forEach((youtubeMonoModalOpen) => {
-  youtubeMonoModalOpen.addEventListener('click' , () => {
-    let youtubeModalTargetId = youtubeMonoModalOpen.getAttribute('data-youtube_modal_target_id');
-    let youtubeMonoModalOpenTarget = document.querySelector(`[data-youtube_modal_id="${youtubeModalTargetId}"]`);
-    if(youtubeMonoModalOpenTarget) {
-      youtubeMonoModalOpenTarget.classList.add('visible');
-      let youtubeMonoModalOpenTargetYtVideoBox = youtubeMonoModalOpenTarget.querySelector('.modal_youtube_video_box');
-      ImageToYoutubeReplace(youtubeMonoModalOpenTargetYtVideoBox);
-    }
-  });
-});
-/*-- youtube modal --*/
-/*-- slide modal --*/
-const slideModalOpenBox = document.querySelectorAll ('[data-modal="slide_modal_open_box"]');
-slideModalOpenBox.forEach((slideModalOpenBox) => {
-  let slideModalTargetId = slideModalOpenBox.getAttribute('data-slide_modal_target_id');
-  let slideModalLayer = document.querySelector(`[data-slide_modal_id="${slideModalTargetId}"]`);
-  let slideModalOpens = slideModalOpenBox.querySelectorAll('[data-modal="slide_modal_open"]');
-  let slideModalOpensArray = [].slice.call(slideModalOpens);
-  let slideModalContents = slideModalLayer.querySelectorAll('[data-modal="slide_modal_content"]');
-  let slideModalContentsArray = [].slice.call(slideModalContents);
-  let slideModalContentsLength = slideModalContents.length;
-  let images = slideModalLayer.querySelectorAll('img[data-src]');
-  slideModalOpens.forEach((slideModalOpen) => {
-    slideModalOpen.addEventListener('click', () => {
-      images.forEach((image) => {image.setAttribute('src', image.getAttribute('data-src'));});
-      slideModalLayer.classList.add('visible');
-      slideModalContents.forEach((slideModalContent) => {slideModalContent.classList.remove('slide_visible');});
-      let slideModalOpenIndex = slideModalOpensArray.indexOf(slideModalOpen);
-      slideModalContents[slideModalOpenIndex].classList.add('slide_visible');
-    });
-  });
-  function slideModalMoveRight() {
-    if ( slideModalLayer.querySelector('.slide_visible') ) {
-      let visibleContent = slideModalLayer.querySelector('.slide_visible');
-      let visibleContentIndex = slideModalContentsArray.indexOf(visibleContent);
-      slideModalContents.forEach((slideModalContent) => {slideModalContent.classList.remove('slide_visible');});
-      if (visibleContentIndex == (slideModalContentsLength - 1) ) {
-        slideModalContents[0].classList.add('slide_visible');
-      } else {
-        slideModalContents[visibleContentIndex].nextElementSibling.classList.add('slide_visible');
-      }
-    }
+/**
+ * モーダル機能（複数タイプ対応）
+ * 
+ * 使い方:
+ * 
+ * 【1. 汎用モノモーダル】
+ * <button data-modal="mono_modal_open" data-mono_modal_target_id="modal1">開く</button>
+ * <div class="cmn_modal_layer" data-mono_modal_id="modal1">
+ *   <div class="modal_bg" data-modal="modal_close_element"></div>
+ *   <div class="modal_inner">コンテンツ</div>
+ *   <div class="modal_close_btn" data-modal="modal_close_element"></div>
+ * </div>
+ * 
+ * 【2. 画像モーダル（自動生成）】
+ * <img data-modal="img_mono_modal_trigger" src="image.jpg" alt="">
+ * 画像をクリックするとモーダルで拡大表示（自動でモーダル要素を生成）
+ * 
+ * 【3. YouTubeモーダル】
+ * <button data-modal="youtube_mono_modal_open" data-youtube_modal_target_id="yt1">動画を見る</button>
+ * <div class="cmn_modal_layer" data-youtube_modal_id="yt1">
+ *   <div class="modal_bg" data-modal="modal_close_element"></div>
+ *   <div class="modal_inner">
+ *     <div class="modal_youtube_video_box" youtubeid="VIDEO_ID">
+ *       <img src="https://img.youtube.com/vi/VIDEO_ID/maxresdefault.jpg" alt="">
+ *     </div>
+ *   </div>
+ *   <div class="modal_close_btn" data-modal="modal_close_element"></div>
+ * </div>
+ * 
+ * 【4. スライドモーダル（ギャラリー）】
+ * <div data-modal="slide_modal_open_box" data-slide_modal_target_id="gallery1">
+ *   <img data-modal="slide_modal_open" src="thumb1.jpg" alt="">
+ *   <img data-modal="slide_modal_open" src="thumb2.jpg" alt="">
+ * </div>
+ * <div class="cmn_modal_layer" data-slide_modal_id="gallery1">
+ *   <div class="modal_bg" data-modal="modal_close_element"></div>
+ *   <div class="modal_inner">
+ *     <div data-modal="slide_modal_content"><img data-src="image1.jpg" alt=""></div>
+ *     <div data-modal="slide_modal_content"><img data-src="image2.jpg" alt=""></div>
+ *   </div>
+ *   <div data-modal="modal_prev_element">◀</div>
+ *   <div data-modal="modal_next_element">▶</div>
+ *   <div class="modal_close_btn" data-modal="modal_close_element"></div>
+ * </div>
+ * 
+ * 矢印キー（←→）でスライド操作可能
+ * 
+ * 全モーダル共通:
+ * - 開いた状態でclass="visible"を追加
+ * - data-modal="modal_close_element"でモーダルを閉じる
+ */
+
+(function() {
+  'use strict';
+  
+  // 設定
+  const CONFIG = {
+    visibleClass: 'visible',
+    slideVisibleClass: 'slide_visible',
+    playClass: 'play'
+  };
+  
+  // YouTube動画の埋め込み/削除
+  function replaceToYouTubeIframe(container) {
+    const youtubeId = container.getAttribute('youtubeid');
+    if (!youtubeId) return;
+    
+    const iframe = `<iframe class="youtube_player" youtubeid="${youtubeId}" src="https://www.youtube.com/embed/${youtubeId}?playsinline=1&enablejsapi=1&rel=0" frameborder="0" allowfullscreen></iframe>`;
+    container.innerHTML = iframe;
+    container.classList.add(CONFIG.playClass);
   }
-  function slideModalMoveLeft() {
-    if ( slideModalLayer.querySelector('.slide_visible') ) {
-      let visibleContent = slideModalLayer.querySelector('.slide_visible');
-      let visibleContentIndex = slideModalContentsArray.indexOf(visibleContent);
-      slideModalContents.forEach((slideModalContent) => {slideModalContent.classList.remove('slide_visible');});
-      if (visibleContentIndex == (0) ) {
-        slideModalContents[(slideModalContentsLength - 1)].classList.add('slide_visible');
-      } else {
-        slideModalContents[visibleContentIndex].previousElementSibling.classList.add('slide_visible');
-      }
-    }
+  
+  function replaceToYouTubeThumbnail(container) {
+    const youtubeId = container.getAttribute('youtubeid');
+    if (!youtubeId) return;
+    
+    const thumbnail = `<img src="https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg" alt="YouTube thumbnail">`;
+    container.innerHTML = thumbnail;
+    container.classList.remove(CONFIG.playClass);
   }
-  let modalPrevBtn = slideModalLayer.querySelector('[data-modal="modal_prev_element"]');
-  modalPrevBtn.addEventListener('click' , () => { slideModalMoveLeft(); });
-  let modalNextBtn = slideModalLayer.querySelector('[data-modal="modal_next_element"]');
-  modalNextBtn.addEventListener('click' , () => { slideModalMoveRight(); });
-  document.addEventListener('keydown', (e) => {
-    if(e.code == 'ArrowLeft'){
-      slideModalMoveLeft();
-    } else if (e.code == 'ArrowRight') {
-      slideModalMoveRight();
-    }
-  });
-});
-/*-- slide modal --*/
-/*-- modal close --*/
-const modalCloseElements = document.querySelectorAll('[data-modal="modal_close_element"]');
-const modalLayers = document.querySelectorAll('.cmn_modal_layer');
-modalCloseElements.forEach((modalCloseElement) => {
-  modalCloseElement.addEventListener('click' , () => {
-    modalLayers.forEach((modalLayer) => {
-      modalLayer.classList.remove('visible');
+  
+  // 1. 汎用モノモーダル
+  function initMonoModal() {
+    const triggers = document.querySelectorAll('[data-modal="mono_modal_open"]');
+    
+    triggers.forEach(trigger => {
+      trigger.addEventListener('click', () => {
+        const targetId = trigger.getAttribute('data-mono_modal_target_id');
+        const targetModal = document.querySelector(`[data-mono_modal_id="${targetId}"]`);
+        
+        if (targetModal) {
+          targetModal.classList.add(CONFIG.visibleClass);
+        }
+      });
     });
-    const slideModalContents = document.querySelectorAll('[data-modal="slide_modal_content"]');
-    slideModalContents.forEach((slideModalContent) => {slideModalContent.classList.remove('slide_visible');});
-    const modal_youtube_video_boxs = document.querySelectorAll('.modal_youtube_video_box');
-    modal_youtube_video_boxs.forEach((modal_youtube_video_box) => {
-      YoutubeToImageReplace(modal_youtube_video_box);
+  }
+  
+  // 2. 画像モーダル（自動生成）
+  function initImageMonoModal() {
+    const images = document.querySelectorAll('[data-modal="img_mono_modal_trigger"]');
+    
+    images.forEach(image => {
+      const imageSrc = image.getAttribute('src');
+      const modalHTML = `
+        <div data-modal="img_mono_modal_open" class="cmn_img_mono_modal_trigger">
+          <img src="${imageSrc}" alt="modal open">
+        </div>
+        <div class="cmn_modal_layer">
+          <div class="modal_bg" data-modal="modal_close_element"></div>
+          <div class="modal_inner">
+            <img src="${imageSrc}" class="img_mono_modal_content" alt="">
+          </div>
+          <div class="modal_close_btn" data-modal="modal_close_element"></div>
+        </div>
+      `;
+      
+      const fragment = document.createRange().createContextualFragment(modalHTML);
+      image.parentNode.replaceChild(fragment, image);
     });
-  });
-  return false;
-});
-/*-- modal close --*/
+    
+    // 生成されたトリガーにイベント設定
+    const generatedTriggers = document.querySelectorAll('[data-modal="img_mono_modal_open"]');
+    generatedTriggers.forEach(trigger => {
+      trigger.addEventListener('click', () => {
+        const targetModal = trigger.nextElementSibling;
+        if (targetModal) {
+          targetModal.classList.add(CONFIG.visibleClass);
+        }
+      });
+    });
+  }
+  
+  // 3. YouTubeモーダル
+  function initYouTubeModal() {
+    const triggers = document.querySelectorAll('[data-modal="youtube_mono_modal_open"]');
+    
+    triggers.forEach(trigger => {
+      trigger.addEventListener('click', () => {
+        const targetId = trigger.getAttribute('data-youtube_modal_target_id');
+        const targetModal = document.querySelector(`[data-youtube_modal_id="${targetId}"]`);
+        
+        if (targetModal) {
+          targetModal.classList.add(CONFIG.visibleClass);
+          const videoBox = targetModal.querySelector('.modal_youtube_video_box');
+          if (videoBox) {
+            replaceToYouTubeIframe(videoBox);
+          }
+        }
+      });
+    });
+  }
+  
+  // 4. スライドモーダル
+  function initSlideModal() {
+    const openBoxes = document.querySelectorAll('[data-modal="slide_modal_open_box"]');
+    
+    openBoxes.forEach(openBox => {
+      const targetId = openBox.getAttribute('data-slide_modal_target_id');
+      const modalLayer = document.querySelector(`[data-slide_modal_id="${targetId}"]`);
+      
+      if (!modalLayer) return;
+      
+      const triggers = openBox.querySelectorAll('[data-modal="slide_modal_open"]');
+      const contents = modalLayer.querySelectorAll('[data-modal="slide_modal_content"]');
+      const images = modalLayer.querySelectorAll('img[data-src]');
+      const prevBtn = modalLayer.querySelector('[data-modal="modal_prev_element"]');
+      const nextBtn = modalLayer.querySelector('[data-modal="modal_next_element"]');
+      
+      // スライド移動関数
+      function moveSlide(direction) {
+        const visibleContent = modalLayer.querySelector(`.${CONFIG.slideVisibleClass}`);
+        if (!visibleContent) return;
+        
+        const contentsArray = Array.from(contents);
+        const currentIndex = contentsArray.indexOf(visibleContent);
+        let nextIndex;
+        
+        if (direction === 'next') {
+          nextIndex = (currentIndex + 1) % contents.length;
+        } else {
+          nextIndex = (currentIndex - 1 + contents.length) % contents.length;
+        }
+        
+        contents.forEach(content => content.classList.remove(CONFIG.slideVisibleClass));
+        contents[nextIndex].classList.add(CONFIG.slideVisibleClass);
+      }
+      
+      // トリガークリックで開く
+      triggers.forEach((trigger, index) => {
+        trigger.addEventListener('click', () => {
+          // data-src から src に画像を読み込み
+          images.forEach(image => {
+            const dataSrc = image.getAttribute('data-src');
+            if (dataSrc) {
+              image.setAttribute('src', dataSrc);
+            }
+          });
+          
+          modalLayer.classList.add(CONFIG.visibleClass);
+          contents.forEach(content => content.classList.remove(CONFIG.slideVisibleClass));
+          contents[index].classList.add(CONFIG.slideVisibleClass);
+        });
+      });
+      
+      // 前へ・次へボタン
+      if (prevBtn) {
+        prevBtn.addEventListener('click', () => moveSlide('prev'));
+      }
+      if (nextBtn) {
+        nextBtn.addEventListener('click', () => moveSlide('next'));
+      }
+      
+      // キーボード操作
+      document.addEventListener('keydown', (e) => {
+        if (!modalLayer.classList.contains(CONFIG.visibleClass)) return;
+        
+        if (e.code === 'ArrowLeft') {
+          moveSlide('prev');
+        } else if (e.code === 'ArrowRight') {
+          moveSlide('next');
+        }
+      });
+    });
+  }
+  
+  // モーダルを閉じる
+  function initModalClose() {
+    const closeElements = document.querySelectorAll('[data-modal="modal_close_element"]');
+    const modalLayers = document.querySelectorAll('.cmn_modal_layer');
+    
+    closeElements.forEach(closeElement => {
+      closeElement.addEventListener('click', () => {
+        // 全モーダルを閉じる
+        modalLayers.forEach(layer => {
+          layer.classList.remove(CONFIG.visibleClass);
+        });
+        
+        // スライドモーダルのスライド表示をリセット
+        const slideContents = document.querySelectorAll('[data-modal="slide_modal_content"]');
+        slideContents.forEach(content => {
+          content.classList.remove(CONFIG.slideVisibleClass);
+        });
+        
+        // YouTube動画をサムネイルに戻す
+        const youtubeBoxes = document.querySelectorAll('.modal_youtube_video_box');
+        youtubeBoxes.forEach(box => {
+          replaceToYouTubeThumbnail(box);
+        });
+      });
+    });
+  }
+  
+  // 初期化
+  function init() {
+    initMonoModal();
+    initImageMonoModal();
+    initYouTubeModal();
+    initSlideModal();
+    initModalClose();
+  }
+  
+  // DOM読み込み後に実行
+  document.addEventListener('DOMContentLoaded', init);
+  
+})();
