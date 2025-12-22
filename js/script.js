@@ -1127,7 +1127,6 @@
     roundLengths: true,
     watchOverflow: true,
     speed: 500,
-    autoplay: { delay: 6000 }
   };
   
   const SINGLE_SLIDE_CONFIG = {
@@ -1215,7 +1214,7 @@
 // カスタム設定での使用
 // const swiper2 = createSwiper('swiper2', {
 //   slidesPerView: 3,
-//   autoplay: { delay: 3000 }
+//   autoplay: { delay: 6000 }
 // });
 
 
