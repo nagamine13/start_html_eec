@@ -22,6 +22,7 @@
   // 設定
   const CONFIG = {
     openClass: 'load_open',
+    bodyClass: 'scroll_on',
     timing: { quick: 0, main: 400, delay: 600 }
   };
 
@@ -33,6 +34,10 @@
       main: document.querySelectorAll('[data-onload="main"]'),
       delay: document.querySelectorAll('[data-onload="delay"]')
     };
+
+    // bodyにクラス追加
+    const body = document.body;
+    body.classList.add(CONFIG.bodyClass);
 
     // 各タイプごとにアニメーション実行
     Object.entries(elements).forEach(([type, nodeList]) => {
