@@ -234,7 +234,7 @@ img {max-width: 100%; height: auto;}
 	.cmn_date_tag_box {margin-bottom: calc(var(--base_gap)*1);}
 	.box_title { position: relative; display: block; width: 100%; font-size: clamp(17px , 2vw , 22px);  line-height: 1.4em; font-weight: 800; letter-spacing: 0.1em;}
 }
-.cmn_write_box {position: relative; text-align: left; font-size: clamp(13px , 2vw , 14px); font-weight: 400; line-height: 1.7em;  width: 100%; font-weight: 500;
+.cmn_write_box {position: relative; text-align: left; font-size: clamp(13px , 2vw , 15px); font-weight: 400; line-height: 1.7em;  width: 100%; font-weight: 500;
 	.main_visual { position: relative; display: block; width: 100%; height: auto; margin-bottom: 3em;
 		img {display: block; width: 100%; height: auto;}
 	}
@@ -258,8 +258,8 @@ img {max-width: 100%; height: auto;}
 	}
 	hr {border-top: 1px dotted var(--cmn_write_box_theme_color); border-right: none;border-bottom: none;border-left: none; margin-bottom: 3em; margin-top: 3em;}
 	strong {font-weight: 900;}
-	&.type_single h2 , &.type_content h3 {position: relative; display: block; padding-bottom: 0.6em; padding-left: 1.1em; font-size: clamp(17px , 2.5vw , 20px); font-weight: 700; margin-bottom: 0.7em; margin-top: 3em; line-height: 1.4em; border-bottom: 1px solid var(--cmn_write_box_theme_color); border-style: dashed; border-top: none; border-left: none; border-right: none; color: var(--cmn_write_box_font_color);
-		&::before {position: absolute; display: block; content: ""; left: 0; top: 0.5em; width: 0.45em; height: 0.45em; background-color: var(--cmn_write_box_theme_color); transform: rotateZ(45deg);}
+	&.type_single h2 , &.type_content h3 {position: relative; display: block; padding-bottom: 0.6em; padding-left: 1.1em; font-size: clamp(16px , 2.5vw , 18px); font-weight: 700; margin-bottom: 0.7em; margin-top: 3em; line-height: 1.4em; border-bottom: 1px solid var(--cmn_write_box_theme_color); border-style: dashed; border-top: none; border-left: none; border-right: none; color: var(--cmn_write_box_font_color);
+		&::before {position: absolute; display: block; content: ""; left: 0; top: 0.4em; width: 0.45em; height: 0.45em; background-color: var(--cmn_write_box_theme_color); transform: rotateZ(45deg);}
 		&:first-child {margin-top: 0;}
 	}
 	&.type_single h3 , &.type_content h4 {position: relative; display: inline-block; font-size: 1.05em; font-weight: 800; margin-bottom: 0.7em; margin-top: 1.5em; line-height: 1.4em; padding: 0.2em 0.9em 0.25em; border: 1px solid var(--cmn_write_box_theme_color); color: var(--cmn_write_box_font_color);
