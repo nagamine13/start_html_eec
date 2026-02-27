@@ -458,9 +458,9 @@ footer{ }
 /*----------------------------------------
 	modal
 ------------------------------------------*/
-.cmn_modal_layer{--modal_btn_size: clamp(50px , 5vw , 70px); position: fixed; top: 0px; left: 0; right: 0; bottom: 0; width: 100%; height: calc(100%); z-index: var(--z_modal); opacity: 0; visibility: hidden; pointer-events: none;
-	.modal_bg {position: fixed; top: 0px; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; opacity: 0; transition: 0.6s;
-		&::before { position: absolute; display: block; content: ""; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--c_black_d); opacity: 0.6; }
+.cmn_modal_layer{--modal_btn_size: clamp(50px , 5vw , 70px); position: fixed; top: 0px; left: 0; right: 0; bottom: 0; width: 100%; height: calc(100%); z-index: var(--z_modal); opacity: 0; visibility: hidden; pointer-events: none; transition: 0.3s;
+	.modal_bg {position: fixed; top: 0px; left: 0; right: 0; bottom: 0; width: 100%; height: 100%;
+		&::before { position: absolute; display: block; content: ""; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); opacity: 0; transition: 0.6s;}
 	}
 	.modal_inner { position: absolute; width: auto; height: auto; top:50%; left: 50%; transform: translateX(-50%) translateY(-50%); text-align: left; opacity: 0; transition: 0.6s;
 		img {width: auto; height: auto; max-width: min(1400px, 94vw); max-height: 75vh; cursor: initial;
@@ -476,7 +476,9 @@ footer{ }
 	}	
 	.modal_close_btn {position: absolute; top: 4px; right: 4px; width: var(--modal_btn_size); height: var(--modal_btn_size); background: no-repeat center url("../images/template_parts/btn_close.svg"); background-size: contain; cursor: pointer;}
 	&.visible { opacity: 1; visibility: visible; pointer-events: auto;
-		.modal_bg { opacity: 1; }
+		.modal_bg {
+			&::before { opacity: 1; }
+		}
 		.modal_inner { opacity: 1;}
 	}
 }

@@ -1266,9 +1266,9 @@
  *     <div data-modal="slide_modal_content"><img data-src="image1.jpg" alt=""></div>
  *     <div data-modal="slide_modal_content"><img data-src="image2.jpg" alt=""></div>
  *   </div>
- *   <div data-modal="modal_prev_element">◀</div>
- *   <div data-modal="modal_next_element">▶</div>
- *   <div class="modal_close_btn" data-modal="modal_close_element"></div>
+ *   <div class="modal_prev_btn" data-modal="modal_prev_element"></div>
+     <div class="modal_next_btn" data-modal="modal_next_element"></div>
+     <div class="modal_close_btn" data-modal="modal_close_element"></div>
  * </div>
  * 
  * 矢印キー（←→）でスライド操作可能
@@ -1390,9 +1390,25 @@
       
       const triggers = openBox.querySelectorAll('[data-modal="slide_modal_open"]');
       const contents = modalLayer.querySelectorAll('[data-modal="slide_modal_content"]');
-      const images = modalLayer.querySelectorAll('img[data-src]');
       const prevBtn = modalLayer.querySelector('[data-modal="modal_prev_element"]');
       const nextBtn = modalLayer.querySelector('[data-modal="modal_next_element"]');
+      
+      // 指定インデックスの画像を data-src → src に読み込む
+      function loadImageAt(index) {
+        if (index < 0 || index >= contents.length) return;
+        const img = contents[index].querySelector('img[data-src]');
+        if (img) {
+          img.setAttribute('src', img.getAttribute('data-src'));
+          img.removeAttribute('data-src'); // 二重読み込み防止
+        }
+      }
+      
+      // 指定インデックスを中心に前後1枚を読み込む
+      function loadAround(index) {
+        loadImageAt(index - 1);
+        loadImageAt(index);
+        loadImageAt(index + 1);
+      }
       
       // スライド移動関数
       function moveSlide(direction) {
@@ -1401,32 +1417,24 @@
         
         const contentsArray = Array.from(contents);
         const currentIndex = contentsArray.indexOf(visibleContent);
-        let nextIndex;
-        
-        if (direction === 'next') {
-          nextIndex = (currentIndex + 1) % contents.length;
-        } else {
-          nextIndex = (currentIndex - 1 + contents.length) % contents.length;
-        }
+        const nextIndex = direction === 'next'
+          ? (currentIndex + 1) % contents.length
+          : (currentIndex - 1 + contents.length) % contents.length;
         
         contents.forEach(content => content.classList.remove(CONFIG.slideVisibleClass));
         contents[nextIndex].classList.add(CONFIG.slideVisibleClass);
+        
+        loadAround(nextIndex); // 移動後に前後を先読み
       }
       
       // トリガークリックで開く
       triggers.forEach((trigger, index) => {
         trigger.addEventListener('click', () => {
-          // data-src から src に画像を読み込み
-          images.forEach(image => {
-            const dataSrc = image.getAttribute('data-src');
-            if (dataSrc) {
-              image.setAttribute('src', dataSrc);
-            }
-          });
-          
           modalLayer.classList.add(CONFIG.visibleClass);
           contents.forEach(content => content.classList.remove(CONFIG.slideVisibleClass));
           contents[index].classList.add(CONFIG.slideVisibleClass);
+          
+          loadAround(index); // クリックした画像とその前後のみ読み込み
         });
       });
       
