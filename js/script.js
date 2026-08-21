@@ -1150,14 +1150,14 @@
   function createSwiper(className, customOptions = {}) {
     // Swiperの存在チェック
     if (typeof Swiper === 'undefined') {
-      console.warn('Swiper is not loaded. Skipping Swiper initialization.');
+      //console.warn('Swiper is not loaded. Skipping Swiper initialization.');
       return null;
     }
     
     const container = document.querySelector(`.${className}`);
     
     if (!container) {
-      console.warn(`Swiper container .${className} not found`);
+      //console.warn(`Swiper container .${className} not found`);
       return null;
     }
     
@@ -1221,6 +1221,13 @@
 //   slidesPerView: 3,
 //   autoplay: { delay: 6000 }
 // });
+
+document.addEventListener('DOMContentLoaded', () => {
+  const cmn_01_swiper = createSwiper('cmn_01_swiper');
+  const cmn_02_swiper = createSwiper('cmn_02_swiper');
+  const cmn_03_swiper = createSwiper('cmn_03_swiper');
+  const cmn_04_swiper = createSwiper('cmn_04_swiper');
+});
 
 
 /*----------------------------------------
